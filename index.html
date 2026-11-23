@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>हस्त रेखा कूपन</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      background-color: #ffffff;
+      color: #222222;
+    }
+
+    /* Top Bar */
+    .top-bar {
+      background-color: #3a4654;
+      color: #ffffff;
+      padding: 12px 16px;
+    }
+
+    .top-title {
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 14px;
+    }
+
+    .login-link {
+      color: #4da3ff;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .login-link:hover {
+      text-decoration: underline;
+    }
+
+    .auto-badge {
+      font-size: 12px;
+      color: #cbd5e1;
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 18px 12px 30px;
+      text-align: center;
+    }
+
+    .header-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .icon-box {
+      width: 62px;
+      height: 62px;
+      background-color: #000000;
+      border-bottom: 9px solid #ff5a1f;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-size: 28px;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+
+    .main-heading {
+      font-size: 22px;
+      font-weight: 700;
+      color: #111111;
+    }
+
+    .date-display {
+      font-size: 20px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin: 10px 0 14px;
+    }
+
+    /* Notice & Rules Section (Visible to Auto-Logged-In User) */
+    .info-section {
+      background-color: #f8f9fa;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      padding: 12px;
+      margin-bottom: 16px;
+      text-align: left;
+    }
+
+    .notice-box {
+      background-color: #fff3cd;
+      border-left: 4px solid #ff9800;
+      padding: 8px 10px;
+      margin-bottom: 10px;
+      font-size: 14px;
+      color: #222;
+      line-height: 1.4;
+    }
+
+    .rules-heading {
+      font-size: 15px;
+      font-weight: 700;
+      color: #111;
+      margin-bottom: 6px;
+    }
+
+    .rules-text {
+      font-size: 14px;
+      color: #333;
+      line-height: 1.55;
+      white-space: pre-line;
+    }
+
+    /* 5x3 Grid (15 Boxes) */
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      border-top: 1px solid #bdbdbd;
+      border-left: 1px solid #bdbdbd;
+      margin-bottom: 18px;
+    }
+
+    .grid-cell {
+      border-right: 1px solid #bdbdbd;
+      border-bottom: 1px solid #bdbdbd;
+      padding: 8px 4px;
+      min-height: 76px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cell-top {
+      font-size: 18px;
+      color: #111;
+      font-weight: 600;
+    }
+
+    .cell-line {
+      width: 75%;
+      border-top: 1px solid #cccccc;
+      margin: 4px 0;
+    }
+
+    .cell-bottom {
+      font-size: 16px;
+      color: #444;
+      min-height: 20px;
+    }
+
+    .footer-heading {
+      font-size: 21px;
+      font-weight: 700;
+      margin: 10px 0 14px;
+      color: #111;
+    }
+
+    .copyright {
+      font-size: 15px;
+      color: #222;
+    }
+
+    /* ADMIN PANEL: Completely hidden for normal users */
+    #adminPanel {
+      display: none;
+      margin-top: 24px;
+      padding: 16px;
+      border: 2px solid #1e293b;
+      border-radius: 8px;
+      background-color: #f1f5f9;
+      text-align: left;
+    }
+
+    #adminPanel h2 {
+      font-size: 18px;
+      margin-bottom: 12px;
+      color: #0f172a;
+      border-bottom: 1px solid #cbd5e1;
+      padding-bottom: 6px;
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: #1e293b;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #94a3b8;
+      border-radius: 4px;
+      font-size: 14px;
+      background: #fff;
+    }
+
+    .admin-grid-row {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .admin-grid-row input {
+      padding: 6px 2px;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .btn {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .btn-save {
+      background-color: #16a34a;
+      color: #ffffff;
+    }
+
+    .btn-logout {
+      background-color: #dc2626;
+      color: #ffffff;
+      margin-left: 8px;
+    }
+
+    /* Login Modal */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+
+    .modal-box {
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 350px;
+      text-align: left;
+    }
+
+    .modal-box h3 {
+      margin-bottom: 12px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="top-title">हस्त रेखा कूपन</div>
+    <div class="top-actions">
+      <a class="login-link" id="openLoginBtn">login</a>
+      <span class="auto-badge" id="statusBadge">User Auto-Login</span>
+    </div>
+  </div>
+
+  <!-- Main Content (User View) -->
+  <div class="container">
+    <div class="header-row">
+      <div class="icon-box">✋</div>
+      <div class="main-heading">( हस्त रेखा ) कूपन</div>
+      <div class="icon-box">✋</div>
+    </div>
+
+    <div class="date-display" id="dateDisplay">23/11/2026-सोमवार</div>
+
+    <!-- Notice & Rules (Read-Only for Users) -->
+    <div class="info-section">
+      <div class="notice-box" id="noticeDisplay">
+        <strong>सूचना:</strong> आज की नई जानकारी यहाँ दिखाई देगी।
+      </div>
+      <div class="rules-heading">नियम (Rules):</div>
+      <div class="rules-text" id="rulesDisplay">1. यूजर को सीधा ऑटोमेटिक लॉगिन मिलेगा और केवल नियम व अपडेट दिखेंगे।
+2. तारीख, सूचना और नियम बदलने का अधिकार केवल एडमिन के पास है।</div>
+    </div>
+
+    <!-- 15 Boxes Grid (5 Columns x 3 Rows) -->
+    <div class="grid-container" id="userGrid"></div>
+
+    <div class="footer-heading">( हस्त रेखा ) कूपन</div>
+    <div class="copyright">©2026, हस्त रेखा कूपन</div>
+
+    <!-- ADMIN PANEL: Only visible after Admin Login -->
+    <div id="adminPanel">
+      <h2>एडमिन कंट्रोल पैनल (केवल एडमिन)</h2>
+
+      <div class="form-group">
+        <label>तारीख और दिन अपडेट करें:</label>
+        <input type="text" id="inputDate" placeholder="23/11/2026-सोमवार" />
+      </div>
+
+      <div class="form-group">
+        <label>नई सूचना (Notice) लिखें या बदलें:</label>
+        <input type="text" id="inputNotice" placeholder="यहाँ नई सूचना लिखें..." />
+      </div>
+
+      <div class="form-group">
+        <label>नियम (Rules) अपडेट करें:</label>
+        <textarea id="inputRules" rows="4" placeholder="सभी नियम यहाँ लिखें..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>15 बॉक्स अपडेट करें (ऊपर मुख्य नंबर / नीचे डैश या वैल्यू):</label>
+        <div id="adminGridEditor"></div>
+      </div>
+
+      <button class="btn btn-save" id="saveAdminBtn">सभी बदलाव सेव करें</button>
+      <button class="btn btn-logout" id="logoutAdminBtn">एडमिन लॉगआउट</button>
+    </div>
+  </div>
+
+  <!-- Admin Login Modal -->
+  <div class="modal-backdrop" id="loginModal">
+    <div class="modal-box">
+      <h3>एडमिन लॉगिन</h3>
+      <div class="form-group">
+        <label>एडमिन पासवर्ड डालें:</label>
+        <input type="password" id="adminPasswordInput" placeholder="पासवर्ड दर्ज करें" />
+      </div>
+      <button class="btn btn-save" id="submitLoginBtn">लॉगिन करें</button>
+      <button class="btn" id="closeLoginBtn" style="margin-left: 6px; background:#e2e8f0;">बंद करें</button>
+    </div>
+  </div>
+
+  <!-- Firebase SDK (Optional: Live Sync across all users) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    // यदि आप Firebase Realtime Database जोड़ना चाहते हैं तो यहाँ अपना firebaseConfig डालें:
+    const firebaseConfig = {
+      apiKey: "",
+      authDomain: "",
+      databaseURL: "",
+      projectId: "",
+      storageBucket: "",
+      messagingSenderId: "",
+      appId: ""
+    };
+
+    const useFirebase = Boolean(firebaseConfig.apiKey && firebaseConfig.databaseURL);
+    let db = null;
+    if (useFirebase) {
+      const app = initializeApp(firebaseConfig);
+      db = getDatabase(app);
+    }
+
+    const defaultData = {
+      dateText: "23/11/2026-सोमवार",
+      noticeText: "आज की नई जानकारी यहाँ दिखाई देगी।",
+      rulesText: "1. यूजर को सीधा ऑटोमेटिक लॉगिन मिलेगा और केवल नियम व अपडेट दिखेंगे।\n2. तारीख, सूचना और नियम बदलने का अधिकार केवल एडमिन के पास है।",
+      cells: [
+        { top: "8", bottom: "-" }, { top: "9", bottom: "-" }, { top: "10", bottom: "-" }, { top: "11", bottom: "-" }, { top: "12", bottom: "-" },
+        { top: "1", bottom: "-" }, { top: "2", bottom: "-" }, { top: "3", bottom: "-" }, { top: "4", bottom: "-" }, { top: "5", bottom: "-" },
+        { top: "6", bottom: "-" }, { top: "7", bottom: "-" }, { top: "8", bottom: "-" }, { top: "9", bottom: "-" }, { top: "10", bottom: "-" }
+      ]
+    };
+
+    // एडमिन पासवर्ड (इसे अपनी पसंद के अनुसार बदल लें)
+    const ADMIN_PASSWORD = "Admin@2026";
+    const LOCAL_KEY = "hastrekha_app_data_v1";
+    const ADMIN_FLAG = "hastrekha_admin_active";
+
+    let currentAppData = JSON.parse(localStorage.getItem(LOCAL_KEY)) || defaultData;
+
+    function isAdminLoggedIn() {
+      return sessionStorage.getItem(ADMIN_FLAG) === "true";
+    }
+
+    function escapeHtml(str) {
+      return String(str ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function escapeAttr(str) {
+      return escapeHtml(str).replace(/'/g, "&#39;");
+    }
+
+    // यूजर स्क्रीन रेंडर करना (ऑटोमेटिक लॉगिन के बाद सीधे यही दिखेगा)
+    function renderUserScreen(data) {
+      currentAppData = data;
+      document.getElementById("dateDisplay").textContent = data.dateText;
+      document.getElementById("noticeDisplay").innerHTML = `<strong>सूचना:</strong> ${escapeHtml(data.noticeText)}`;
+      document.getElementById("rulesDisplay").textContent = data.rulesText;
+
+      const gridEl = document.getElementById("userGrid");
+      gridEl.innerHTML = "";
+      (data.cells || defaultData.cells).forEach((cell) => {
+        const box = document.createElement("div");
+        box.className = "grid-cell";
+        box.innerHTML = `
+          <div class="cell-top">${escapeHtml(cell.top)}</div>
+          <div class="cell-line"></div>
+          <div class="cell-bottom">${escapeHtml(cell.bottom)}</div>
+        `;
+        gridEl.appendChild(box);
+      });
+    }
+
+    // केवल एडमिन के लिए कंट्रोल पैनल खोलना
+    function openAdminPanel() {
+      const panel = document.getElementById("adminPanel");
+      panel.style.display = "block";
+      document.getElementById("statusBadge").textContent = "Admin Active";
+
+      document.getElementById("inputDate").value = currentAppData.dateText;
+      document.getElementById("inputNotice").value = currentAppData.noticeText;
+      document.getElementById("inputRules").value = currentAppData.rulesText;
+
+      const editor = document.getElementById("adminGridEditor");
+      editor.innerHTML = "";
+
+      for (let r = 0; r < 3; r++) {
+        const row = document.createElement("div");
+        row.className = "admin-grid-row";
+        for (let c = 0; c < 5; c++) {
+          const i = r * 5 + c;
+          const cell = currentAppData.cells[i] || { top: "", bottom: "-" };
+          const item = document.createElement("div");
+          item.innerHTML = `
+            <input type="text" data-idx="${i}" data-part="top" value="${escapeAttr(cell.top)}" />
+            <input type="text" data-idx="${i}" data-part="bottom" value="${escapeAttr(cell.bottom)}" style="margin-top:3px;" />
+          `;
+          row.appendChild(item);
+        }
+        editor.appendChild(row);
+      }
+    }
+
+    function closeAdminPanel() {
+      document.getElementById("adminPanel").style.display = "none";
+      document.getElementById("statusBadge").textContent = "User Auto-Login";
+    }
+
+    // डेटा लोड करना (Firebase या LocalStorage से)
+    if (useFirebase && db) {
+      const dataRef = ref(db, "siteData");
+      onValue(dataRef, (snapshot) => {
+        const val = snapshot.val();
+        if (val) {
+          localStorage.setItem(LOCAL_KEY, JSON.stringify(val));
+          renderUserScreen(val);
+          if (isAdminLoggedIn()) openAdminPanel();
+        } else {
+          set(dataRef, defaultData);
+          renderUserScreen(defaultData);
+        }
+      });
+    } else {
+      renderUserScreen(currentAppData);
+      if (isAdminLoggedIn()) openAdminPanel();
+    }
+
+    // Login Modal Controls
+    document.getElementById("openLoginBtn").addEventListener("click", () => {
+      document.getElementById("loginModal").style.display = "flex";
+      document.getElementById("adminPasswordInput").value = "";
+      document.getElementById("adminPasswordInput").focus();
+    });
+
+    document.getElementById("closeLoginBtn").addEventListener("click", () => {
+      document.getElementById("loginModal").style.display = "none";
+    });
+
+    document.getElementById("submitLoginBtn").addEventListener("click", () => {
+      const entered = document.getElementById("adminPasswordInput").value;
+      if (entered === ADMIN_PASSWORD) {
+        sessionStorage.setItem(ADMIN_FLAG, "true");
+        document.getElementById("loginModal").style.display = "none";
+        openAdminPanel();
+        alert("एडमिन लॉगिन सफल!");
+      } else {
+        alert("गलत पासवर्ड! केवल एडमिन ही लॉगिन कर सकता है।");
+      }
+    });
+
+    // Save Updates (Only Admin)
+    document.getElementById("saveAdminBtn").addEventListener("click", async () => {
+      if (!isAdminLoggedIn()) return;
+
+      const updatedCells = currentAppData.cells.map((c) => ({ ...c }));
+      document.querySelectorAll("#adminGridEditor input").forEach((el) => {
+        const idx = Number(el.getAttribute("data-idx"));
+        const part = el.getAttribute("data-part");
+        updatedCells[idx][part] = el.value;
+      });
+
+      const newData = {
+        dateText: document.getElementById("inputDate").value.trim() || currentAppData.dateText,
+        noticeText: document.getElementById("inputNotice").value,
+        rulesText: document.getElementById("inputRules").value,
+        cells: updatedCells
+      };
+
+      localStorage.setItem(LOCAL_KEY, JSON.stringify(newData));
+      renderUserScreen(newData);
+
+      if (useFirebase && db) {
+        await set(ref(db, "siteData"), newData);
+      }
+
+      alert("तारीख, सूचना, नियम और सभी बॉक्स अपडेट हो गए हैं!");
+    });
+document.getElementById("logoutAdminBtn").addEventListener("click", () => {
+      sessionStorage.removeItem(ADMIN_FLAG);
+      closeAdminPanel();
+      alert("एडमिन लॉगआउट हो गया है।");
+    });
+  </script>
+</body>
+</html>
